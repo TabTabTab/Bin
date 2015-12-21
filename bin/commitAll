@@ -1,0 +1,11 @@
+message="autocommit"
+
+if [ "$#" -eq 1 ]
+then
+	message="$1"
+fi
+
+if [ "$#" -lt 2 ]
+then
+	git add -A && git commit -m "$message" 
+fi

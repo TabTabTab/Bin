@@ -1,0 +1,35 @@
+#!/usr/bin/python
+import sys
+
+commands = ['up2']
+def getPrimesBelow(n):
+	hasPotential=[True]*n;
+	for i in xrange(3,int(n**0.5)+1,2):
+		if(hasPotential[i]):
+			fromIndex=i*i;
+			stepSize=i*2;
+			listLength=(n-1-fromIndex)/stepSize+1;
+			hasPotential[fromIndex::stepSize]=[False]*listLength;
+	return [2] + [i for i in xrange(3,n,2) if hasPotential[i]];
+
+def main(argv):
+	val = 1
+        up2 = 'up2' in argv
+        argv = filter(lambda arg: arg not in commands, argv)
+	if len(argv) >= 1:
+		val = int(argv[0])
+	else:
+		print "Please provide one single argument in the form of a potential prime"
+		sys.exit(0)
+        primes = getPrimesBelow(val + 1)
+        if up2:
+            print "\n".join(map(str,primes))
+            sys.exit(0)
+	if val in primes:
+		print val, "IS a prime number"
+	else:
+		print val, "IS NOT a prime number"
+
+if __name__ == '__main__':
+	main(sys.argv[1:])
+

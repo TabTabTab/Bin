@@ -1,0 +1,13 @@
+#!/bin/bash
+
+osdir="/programming/C/EDAF35_OS/EDAF35_HMProject"
+naodir="/programming/NAO"
+
+Sos='os'
+Snao='nao'
+if [ "$1" == "$Sos" ];then
+	echo "$osdir"
+elif [ "$1" == "$Snao" ];then
+	echo "$naodir"
+fi
+

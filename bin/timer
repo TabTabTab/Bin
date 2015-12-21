@@ -1,0 +1,8 @@
+if [ "$#" -eq 1 ]
+then
+	countdown="$1"
+    echo "$countdown" 
+    (sleep "$countdown" && gnome-terminal -e pwd) &	
+else
+	echo -e " failed. fix: supply exactly one argument"
+fi

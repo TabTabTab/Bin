@@ -1,0 +1,20 @@
+
+
+
+
+BOLD='\033[1m'
+NONE='\033[00m'
+
+if [ "$#" -eq 1 ]
+then
+	note="$1"
+	echo -e "\n">>~/Documents/ideas
+	date >> ~/Documents/ideas
+	echo "============================">>~/Documents/ideas
+	echo -e "$note" >> ~/Documents/ideas
+	echo " idea noted.."
+else
+	echo -e " failed. fix: supply exactly one argument"
+fi
+	
+echo -e " hint: use the ${BOLD}ideas${NONE} command to see all ideas"
