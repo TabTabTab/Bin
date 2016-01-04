@@ -1,0 +1,78 @@
+#!/usr/bin/python3
+
+import sys
+import os
+
+
+size_threshold = 10**5
+
+bigs = []
+
+class Node(object):
+    def __init__(self, path=None, is_dir=True):
+        self.path = os.path.basename(path)
+        self.is_dir = is_dir
+        self.size = 0    
+        self.children = []
+
+    def set_is_dir(self, is_dir):
+        self.is_dir = is_dir
+
+    def add_size(self, inc):
+        self.size += inc
+
+    def get_size(self):
+        return self.size
+
+    def add_child(self, child):
+        self.children.append(child)
+        self.size += child.get_size()
+
+    def __str__(self):
+        return self.str_tab(0)
+
+    def str_tab(self, n_tabs):
+        tabbing = ' ' * n_tabs
+        dir_postfix = "/" if self.is_dir else ""
+        s = "{0}{1}{2}, size: {3}\n{4}".format(tabbing, self.path, dir_postfix, self.size, "".join([c.str_tab(n_tabs + 1) for c in self.children]))
+        return s
+
+def find_size(p):
+    size = 0
+    n = Node(p)
+    if os.path.isdir(p):
+        for path in os.listdir(p):
+            abs_path = os.path.join(p, path)
+            child_node = Node(path)
+            if os.path.isdir(abs_path):
+                child_node = find_size(abs_path)
+            elif os.path.isfile(abs_path):
+                child_node.set_is_dir(False)
+                child_node.add_size(os.path.getsize(abs_path))
+            else:
+                print("WE HAVE AN ERROR!")
+                sys.exit(1)
+            n.add_child(child_node)
+    elif os.path.isfile(p):
+        n.set_is_dir(False)
+        n.add_size(os.path.getsize(p))
+    return n
+
+def get_abs_path(root_dir):
+    if root_dir[0] != '/':
+        call_path = os.getcwd()
+        root_dir = os.path.join(call_path, root_dir)
+        root_dir = os.path.normpath(root_dir)
+    return root_dir
+
+def main(argv):
+    root_dir_str = '.'
+    if argv:
+        root_dir_str = argv[0]
+    root_dir = get_abs_path(root_dir_str)
+    
+    print(root_dir)
+    print(find_size(root_dir))
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
